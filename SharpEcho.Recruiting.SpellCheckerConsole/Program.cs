@@ -1,5 +1,7 @@
 ﻿using System;
-
+using System.Linq;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using SharpEcho.Recruiting.SpellChecker.Contracts;
 using SharpEcho.Recruiting.SpellChecker.Core;
 
@@ -40,14 +42,63 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
             // capturing distinct words that are misspelled
 
             // use this spellChecker to evaluate the words
-            var spellChecker = new SpellChecker.Core.SpellChecker
-                (
-                    new ISpellChecker[]
-                    { 
-                        new MnemonicSpellCheckerIBeforeE(),
-                        new DictionaryDotComSpellChecker(),
-                    }
-                );
+            //var spellChecker = new SpellChecker.Core.SpellChecker
+            //    (
+            //        new ISpellChecker[]
+            //        {
+            //            new MnemonicSpellCheckerIBeforeE(),
+            //            new DictionaryDotComSpellChecker(),
+            //        }
+            //    );
+
+            var words = FilterInput(sentence);
+            
+
+            // replace puntuaction with empty string when string ends with punctuation , to prevent false negatives
+            // when spell checking
+
+
+            foreach (string word in words)
+            {
+                Console.WriteLine("'" + word + "'");
+            }
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
+        }
+        static List<String> FilterInput(string input)
+        {
+            // trim the start and end of the sentence, since we are splitting by spaces 
+            input = input.Trim();
+            /* It was not implied that sentence structure was important here. It seems
+             * that only the words were important.
+             * in this case, we should remove any unneccessary characters that may induce false 
+             * negatives ex: "hello." == "hello" is false, but is spelled correctly.
+             */
+
+            // since 'words' are logically seperated by spaces, split the sentence by spaces
+            Dictionary<String, bool> seenWords = new Dictionary<string, bool>();
+            var words = input.Split(' ').ToList();
+            // filter the words that are strictly equal to each other
+            for (var wordIndex = 0; wordIndex < words.Count; wordIndex++)
+            {
+                // compare them in lowercase since they are essentially the same word
+                var seen = false;
+                var word = words[wordIndex].ToLower();
+                Console.WriteLine("filtering words: word'" + word + "'");
+                seenWords.TryGetValue(word, out seen);
+                if (seen)
+                {
+                    words.RemoveAt(wordIndex);
+                }
+                else
+                {
+                    seenWords.Add(word, true);
+                    // we dont care if the word is uppercase or lower case,
+                    // since it will have the same meaning
+                    words[wordIndex] = word;
+                }
+            }
+            return words;
         }
     }
 }
