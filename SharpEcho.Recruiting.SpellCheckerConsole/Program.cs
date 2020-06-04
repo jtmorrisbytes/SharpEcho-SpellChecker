@@ -8,14 +8,14 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
     /// <summary>
     /// Thank you for your interest in a position at SharpEcho.  The following are the "requirements" for this project:
     /// 
-    /// 1. Implent Main() below so that a user can input a sentance.  Each word in that
-    ///    sentance will be evaluated with the SpellChecker, which returns true for a word
+    /// 1. Implent Main() below so that a user can input a sentence.  Each word in that
+    ///    sentence will be evaluated with the SpellChecker, which returns true for a word
     ///    that is spelled correctly and false for a word that is spelled incorrectly.  Display
     ///    out each *distnict* word that is misspelled.  That is, if a user uses the same misspelled
     ///    word more than once, simply output that word one time.
     ///    
     ///    Example:
-    ///    Please enter a sentance: Salley sells seashellss by the seashore.  The shells Salley sells are surely by the sea.
+    ///    Please enter a sentence: Salley sells seashellss by the seashore.  The shells Salley sells are surely by the sea.
     ///    Misspelled words: Salley seashellss
     ///    
     /// 2. The concrete implementation of SpellChecker depends on two other implementations of ISpellChecker, DictionaryDotComSpellChecker
@@ -32,10 +32,10 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Console.Write("Please enter a sentance: ");
-            var sentance = Console.ReadLine();
+            Console.Write("Please enter a sentence: ");
+            var sentence = Console.ReadLine();
 
-            // first break the sentance up into words, 
+            // first break the sentence up into words, 
             // then iterate through the list of words using the spell checker
             // capturing distinct words that are misspelled
 
