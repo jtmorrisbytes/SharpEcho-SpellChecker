@@ -42,17 +42,21 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
             // capturing distinct words that are misspelled
 
             // use this spellChecker to evaluate the words
-            //var spellChecker = new SpellChecker.Core.SpellChecker
-            //    (
-            //        new ISpellChecker[]
-            //        {
-            //            new MnemonicSpellCheckerIBeforeE(),
-            //            new DictionaryDotComSpellChecker(),
-            //        }
-            //    );
+            var spellChecker = new SpellChecker.Core.SpellChecker
+                (
+                    new ISpellChecker[]
+                    {
+                        //new MnemonicSpellCheckerIBeforeE(),
+                        new DictionaryDotComSpellChecker(),
+                    }
+                );
 
             var words = FilterInput(sentence);
-            
+            foreach (string word in words)
+            {
+
+                spellChecker.Check(word);
+            }
 
             // replace puntuaction with empty string when string ends with punctuation , to prevent false negatives
             // when spell checking
