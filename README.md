@@ -6,7 +6,7 @@
 2. Install Visual Studio, Ensure .Net is selected before installing
 3. Clone this repository, and open the .sln file in Visual Studio
 4. Unless you are running tests, there should not be any external dependencies.
-   Click on the start button to compile and the app in debug mode
+   Click on the start button to compile the app in debug mode
 5. When the application starts up, It will ask you to enter a sentence. The application makes best effort to be case-insensitive,
    search dictionary.com to check for misspellings, and check the english -IE- grammar rule.
 6. The application will print "No misspellings found" on success and list "misspelled words: '<word1>', '<word2>'..." when
