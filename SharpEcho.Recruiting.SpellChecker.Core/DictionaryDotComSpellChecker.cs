@@ -23,22 +23,19 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
     {
         
         const string API_URL = "https://www.dictionary.com/browse/";
-        const int SUCCESS = 200;
-        const int REDIRECT = 301;
         string[] punctuation = { "!", ".", ",", ";" };
         // RFC_RESERVED_CHARACTERS according to https://en.wikipedia.org/wiki/Percent-encoding
-        string[] RFC_RESERVED_CHARACTERS = new string[] { 
+        string[] RFC_RESERVED_CHARACTERS = new string[] {
             "!", "*",
             "'", "(",
             ")", ";",
             ":", "@",
-            "&", "=", 
+            "&", "=",
             "+",  ",",
             "/", "?",
             "#",  "[",
             "]",
             };
-        //string[] RFC_ENCODED_SEQUENCES = new string[] { "%21", "%2A", "%27", "%28", "%29", "%3B", "%40", "%3A", "%26", "%3D", "%2B", "%2C", "%2F", "%3F", "%23", "%5B", "%5D" };
         public DictionaryDotComSpellChecker()
         {
             // This trusts all certificates. This should NEVER be done in production.
@@ -48,8 +45,6 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
         
         public bool Check(string word)
         {
-
-            //Console.WriteLine("checking word: " + word);
             // attempting to place invalid characters in the url
             // causes a web exception
             foreach (string punct in this.punctuation)
@@ -70,9 +65,6 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
                 { 
                     return false;
                 }
-
-
-
             }
             // The SpellChecker should have checked for all valid punctuation at this point. 
             // if this spellchecker encounters any reserved characters, or unreserved characters
@@ -107,9 +99,7 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
                     Console.WriteLine("got status code " + response.StatusCode.ToString());
                     response.Close();
                     return false;
-
                 }
-
             }
             /* Console error statements would probably be best kept behind a debug flag,
              * or environment variable during production. catching them will allow the program
@@ -117,7 +107,7 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
              */
             catch (InvalidCastException)
             {
-                Console.Error.WriteLine("An InvalidCastException occurred while trying to check word");
+                //Console.Error.WriteLine("An InvalidCastException occurred while trying to check word");
                 return false;
             }
             catch (WebException webExc)
@@ -134,21 +124,6 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
             {
                 dictionaryCheck.Abort();
             }
-            
-
-            //throw new System.NotImplementedException();
-
         }
-        //public string EncodeUri(string theString)
-        //{
-        //    // blindly replace puncuation and reserved characters
-        //    // with the rfc escape codes.
-        //    // this function assumes that the programmer has already cleaned up the
-        //    // data other than encoding the URI.
-        //    for(short reservedCharPairIndex = 0; reservedCharPairIndex < RFC_RESERVED_CHARACTERS.GetLength(0); reservedCharPairIndex++){
-        //        theString.Replace(RFC_RESERVED_CHARACTERS[reservedCharPairIndex,0], RFC_RESERVED_CHARACTERS[reservedCharPairIndex, 1]);
-        //    }
-        //    return theString;
-        //}
     }
 }
