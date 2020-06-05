@@ -18,11 +18,15 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
     /// 
     /// We look for something in the response that gives us a clear indication whether the
     /// word is spelled correctly or not
+    /// 
+    /// --- notes from the applicant ---
+    /// dictionary.
+    /// 
     /// </summary>
     public class DictionaryDotComSpellChecker : ISpellChecker
     {
         
-        const string API_URL = "https://www.dictionary.com/browse/";
+        const string API_URL = "http://www.dictionary.reference.com/browse/";
         string[] punctuation = { "!", ".", ",", ";" };
         // RFC_RESERVED_CHARACTERS according to https://en.wikipedia.org/wiki/Percent-encoding
         string[] RFC_RESERVED_CHARACTERS = new string[] {
@@ -50,17 +54,19 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
             foreach (string punct in this.punctuation)
             {
                 // if the word ends with the punctuation, 
-                // then remove it, because it is most likely,
+                // then remove it, because it is most likely
                 // the end of the sentence.
                 if (word.EndsWith(punct))
                 {
                    word = word.Substring(0, word.Length - 1);
                 }
-                //While it is possible to EncodeUri the basic punctuation,
-                // any word that contains punctuation in the middle of the
-                // word is misspelled anyways. If the program was allowed
-                // to send a request that contains those characters, 
-                // the request could fail
+                /* While it is possible to EncodeUri the basic punctuation
+                 * and reserved characters,
+                 * any word that contains punctuation in the middle of the
+                 * word is misspelled anyways. If the program was allowed
+                 * to send a request that contains those characters, 
+                 * the request could fail.
+                 */
                 if (word.Contains(punct))
                 { 
                     return false;
@@ -81,22 +87,15 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
             // this type cast could fail, even if unlikely.
             try
             {
-
-            HttpWebResponse response = (HttpWebResponse)dictionaryCheck.GetResponse();
-                if (response.StatusCode.Equals(HttpStatusCode.OK))
+                HttpWebResponse response = (HttpWebResponse)dictionaryCheck.GetResponse();
+                if (response.StatusCode.Equals(HttpStatusCode.OK) || 
+                   (response.StatusCode.Equals(HttpStatusCode.Moved) && !response.Headers.Get("location").Contains("misspelling")))
                 {
                     response.Close();
                     return true;
                 }
-                else if ((response.StatusCode.Equals(HttpStatusCode.Moved) && response.Headers.Get("location").Contains("misspelling"))
-                          || response.StatusCode.Equals(HttpStatusCode.NotFound))
-                {
-                    response.Close();
-                    return false;
-                }
                 else
                 {
-                    Console.WriteLine("got status code " + response.StatusCode.ToString());
                     response.Close();
                     return false;
                 }
@@ -110,18 +109,18 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
                 //Console.Error.WriteLine("An InvalidCastException occurred while trying to check word");
                 return false;
             }
-            catch (WebException webExc)
+            catch (WebException)
             {
-                // return false if any exception occurred;
-                if(webExc.Status.Equals(HttpStatusCode.NotFound))
-                {
-                    Console.WriteLine("Word not found on dictionary.com");
-                }
-                
-                return false;
+                // return false if any exception occurred.
+                /* ideally the program would want to distinguish
+                 * between a failed request, and an expected failure
+                 * response.
+                 */ 
+                return false;              
             }
             finally
             {
+                //abort the operation if it failed.
                 dictionaryCheck.Abort();
             }
         }
