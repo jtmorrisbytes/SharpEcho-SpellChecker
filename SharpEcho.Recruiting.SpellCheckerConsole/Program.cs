@@ -46,7 +46,7 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
                 (
                     new ISpellChecker[]
                     {
-                        //new MnemonicSpellCheckerIBeforeE(),
+                        new MnemonicSpellCheckerIBeforeE(),
                         new DictionaryDotComSpellChecker(),
                     }
                 );
