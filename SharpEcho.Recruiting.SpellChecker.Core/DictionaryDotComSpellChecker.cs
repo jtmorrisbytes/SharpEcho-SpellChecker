@@ -49,7 +49,7 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
         public bool Check(string word)
         {
 
-            Console.WriteLine("checking word: " + word);
+            //Console.WriteLine("checking word: " + word);
             // attempting to place invalid characters in the url
             // causes a web exception
             foreach (string punct in this.punctuation)

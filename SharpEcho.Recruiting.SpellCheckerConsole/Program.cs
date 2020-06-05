@@ -52,19 +52,31 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
                 );
 
             var words = FilterInput(sentence);
+            var mispelledWords = new List<String>();
             foreach (string word in words)
             {
 
-                spellChecker.Check(word);
+                if (spellChecker.Check(word) == false)
+                {
+                    mispelledWords.Add(word);
+                }
             }
 
             // replace puntuaction with empty string when string ends with punctuation , to prevent false negatives
             // when spell checking
 
-
-            foreach (string word in words)
+            if(mispelledWords.Count() > 0)
             {
-                Console.WriteLine("'" + word + "'");
+                Console.Write("mispelled words: ");
+               foreach (string misspelledWord in mispelledWords)
+               {
+                   Console.Write("'" + misspelledWord + "' ");
+               }
+                Console.Write("\r\n");
+            }
+            else
+            {
+                Console.WriteLine("No misspelled words.");
             }
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
@@ -88,7 +100,7 @@ namespace SharpEcho.Recruiting.SpellCheckerConsole
                 // compare them in lowercase since they are essentially the same word
                 var seen = false;
                 var word = words[wordIndex].ToLower();
-                Console.WriteLine("filtering words: word'" + word + "'");
+                //Console.WriteLine("filtering words: word'" + word + "'");
                 seenWords.TryGetValue(word, out seen);
                 if (seen)
                 {
