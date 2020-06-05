@@ -1,4 +1,5 @@
 ﻿using SharpEcho.Recruiting.SpellChecker.Contracts;
+using System;
 
 namespace SharpEcho.Recruiting.SpellChecker.Core
 {
@@ -20,7 +21,21 @@ namespace SharpEcho.Recruiting.SpellChecker.Core
         /// <returns>true when the word is spelled correctly, false otherwise</returns>
         public bool Check(string word)
         {
-            throw new System.NotImplementedException();
+            //this spellchecker can only effectively 
+            //check words that are three or more characters
+            //in length, and contains the sequence. if the word is less than three characters,
+            // return true and pass it on to the next spellchecker
+
+            // ignore case
+            word = word.ToLower();
+            if (word.Length >= 3) {
+                    var IEIndex = word.IndexOf("ie");
+               if(IEIndex > 0)
+                {
+                    return word[IEIndex - 1].Equals('c') == false;
+                }
+            }
+            return true;
         }
     }
 }

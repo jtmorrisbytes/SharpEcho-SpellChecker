@@ -20,12 +20,13 @@ namespace SharpEcho.Recruiting.SpellChecker.Tests
         public void Check_That_SharpEcho_Is_Misspelled()
         {
             // implement this test
+            Assert.IsFalse(SpellChecker.Check("SharpEcho"));
         }
 
         [Test]
         public void Check_That_South_Is_Not_Misspelled()
         {
-            // implement this test
+            Assert.IsTrue(SpellChecker.Check("South"));
         }
     }
 }

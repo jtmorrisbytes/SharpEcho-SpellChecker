@@ -19,13 +19,20 @@ namespace SharpEcho.Recruiting.SpellChecker.Tests
         [Test]
         public void Check_Word_That_Contains_I_Before_E_Is_Spelled_Correctly()
         {
-            // implement this test
-        }
+            Assert.IsTrue(SpellChecker.Check("priest"));
+            Assert.IsTrue(SpellChecker.Check("fierce"));
 
+            Assert.IsTrue(SpellChecker.Check("conceive"));
+            Assert.IsTrue(SpellChecker.Check("deceit"));
+        }
         [Test]
         public void Check_Word_That_Contains_I_Before_E_Is_Spelled_Incorrectly()
         {
             // implement this test
+            // assert true when spelled correctly
+
+            Assert.IsFalse(SpellChecker.Check("concieve"));
+            Assert.IsFalse(SpellChecker.Check("deciet"));
         }      
     }
 }
